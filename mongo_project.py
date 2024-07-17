@@ -86,6 +86,26 @@ def add_record():
         print("Error accessing the database")    
 
 
+def edit_record():
+    doc = get_record()
+    if doc:
+        update_doc = {}
+        print("")
+        for key,value in doc.items():
+            if key != "_id":
+                update_doc[key] = input(key.capitalize() + " [" + value + "] > ")
+                
+                if update_doc[key] == "":
+                    update_doc[key] = value
+        
+        try:
+            coll.update_one(doc, {"$set": update_doc})
+            print("")
+            print("Document updated")
+        except:
+            print("Error accessing the database")
+
+
 def main_loop():
     while True:
         option = show_menu()
@@ -94,8 +114,7 @@ def main_loop():
         elif option == "2":
             find_record()
         elif option == "3":
-            print("You have selection option 3")
-            # edit_record()
+            edit_record()
         elif option == "4":
             print("You have selection option 4")
             #exit_record

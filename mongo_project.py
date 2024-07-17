@@ -27,7 +27,7 @@ def show_menu():
     print("1. Add a record")
     print("2. Find a record by name")
     print("3. Edit a record")
-    print("4. Exit a record")
+    print("4. Delete a record")
     print("5. Exit the menu")
     
     option = input("Enter an option: ")
@@ -106,6 +106,28 @@ def edit_record():
             print("Error accessing the database")
 
 
+def delete_record():
+    doc = get_record()
+    if doc:
+        print("")
+        for key, value in doc.items():
+            if key != "_id":
+                print(key.capitalize() + ": " + value.capitalize())
+        
+        print("")
+        confirmation = input("Is this document you want to delete?\nY or N > ")
+        print("")
+        
+        if confirmation.lower() == "y":
+            try:
+                coll.delete_one(doc)
+                print("Document deleted!")
+            except:
+                print("Error accessing the database")
+        else:
+            print("Document not deleted")
+
+
 def main_loop():
     while True:
         option = show_menu()
@@ -116,8 +138,7 @@ def main_loop():
         elif option == "3":
             edit_record()
         elif option == "4":
-            print("You have selection option 4")
-            #exit_record
+            delete_record()
         elif option == "5":
             conn.close()
             break
